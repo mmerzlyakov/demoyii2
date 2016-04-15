@@ -1,0 +1,189 @@
+<?php
+
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use yii\widgets\Pjax;
+use yii\widgets\Menu;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use kartik\nav\NavX;
+
+/* @var $this yii\web\View */
+
+$this->title = 'My Yii Application';
+?>
+<div class="site-index">
+
+    <div class="jumbotron">
+
+        <p class="lead">Authorization by predator_pc@10/04/2016</p>
+
+    </div>
+
+    <div class="body-content">
+
+
+		<?php 
+
+
+for($i=0; $i<count($list); $i++){
+
+	switch ($list[$i]['level'])
+	{
+		case 1:echo "<a href='/catalog/".$list[$i]['url']."/'>".$list[$i]['item']."</a><br>";break;
+		case 2:echo "&nbsp&nbsp&nbsp&nbsp<a href='/catalog/".$list[$i]['url']."/".$list[$i]['id']."'>".$list[$i]['item']."</a><br>";break;
+		case 3:echo "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='/catalog/".$list[$i]['url']."/".$list[$i]['id']."'>".$list[$i]['item']."</a><br>";break;
+	}
+}
+
+
+$arr=[];
+    /*
+
+for($i=0; $i<count($list); $i++){
+
+	switch ($list[$i]['level'])
+	{
+		case 1:{
+			$arr['items'][$i]=['label'=> $list[$i]['item'], 'url'=>$list[$i]['url'], 'level' =>$list[$i]['level']];  
+			echo "<a href='/catalog/".$list[$i]['url']."/'>".$list[$i]['item']."</a><br>";
+			break;
+		}
+		case 2:{
+			$arr['items'][$i]=['label'=> $list[$i]['item'], 'url'=>$list[$i]['url'], 'level' =>$list[$i]['level']];  
+			echo "&nbsp&nbsp&nbsp&nbsp<a href='/catalog/".$list[$i]['url']."/".$list[$i]['id']."'>".$list[$i]['item']."</a><br>";
+			break;
+		}
+
+//		case 2:{$arr['items'][$i][] echo "&nbsp&nbsp&nbsp&nbsp<a href='/catalog/".$list[$i]['url']."/".$list[$i]['id']."'>".$list[$i]['item']."</a><br>";break;}
+//		case 3:{$arr['items'][$i][] echo "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href='/catalog/".$list[$i]['url']."/".$list[$i]['id']."'>".$list[$i]['item']."</a><br>";break;}
+	}
+}   
+
+
+var_dump($arr);die();
+
+*/
+
+$cat = [];
+$sub = [];
+$li = [];
+$inc_cat=0;
+$inc_sub=0;
+$inc_li=0;
+
+
+for($i=0; $i<count($list); $i++)
+{
+	if($list[$i]['level']==1){
+		$cat[$inc_cat]['label'] = $list[$i]['item'];
+		$cat[$inc_cat]['url'] = $list[$i]['url'];
+		$cat[$inc_cat]['id'] = $list[$i]['id'];
+		$cat[$inc_cat]['level'] = $list[$i]['level'];
+		$cat[$inc_cat]['group_id'] = $inc_cat;
+		$inc_cat++;
+	} 
+	if($list[$i]['level']==2){
+		$sub[$inc_sub]['label'] = $list[$i]['item'];
+		$sub[$inc_sub]['url'] = $list[$i]['url'];
+		$sub[$inc_sub]['id'] = $list[$i]['id'];
+		$sub[$inc_sub]['level'] = $list[$i]['level'];	
+		$sub[$inc_sub]['group_id'] = $inc_cat-1;
+		$sub[$inc_sub]['self_id'] = $inc_sub;
+		$inc_sub++;
+	} 
+	if($list[$i]['level']==3){
+		$li[$inc_li]['label'] = $list[$i]['item'];
+		$li[$inc_li]['url'] = $list[$i]['url'];
+		$li[$inc_li]['id'] = $list[$i]['id'];
+		$li[$inc_li]['level'] = $list[$i]['level'];
+		$li[$inc_li]['group_id'] = $inc_sub;
+//		$li[$inc_li]['self_id'] = $inc_sub;
+		$inc_li++;
+	} 
+}
+
+
+
+$outer_cnt=0;
+
+$s_sub =[];
+
+$outer_cnt1=0;
+$i=0;
+
+
+foreach($cat as $value)
+{
+		if($value['group_id']==$cat[$outer_cnt]['group_id']){
+			echo "[".$value['label']."][".$value['group_id']."]<br>";
+
+$current_group = $value['group_id'];
+
+			foreach($sub as $value1)
+			{
+                	if($value['group_id']==$value1['group_id'] && $value1['level']==2 )	{
+					
+						if($value['label']!=$value1['label'])
+	                	 	echo "***[ ".$value1['label']."][".$value1['group_id']."]<br>";
+				
+//					echo "*********[ ".$value1['group_id']."=".$value1['self_id']."]<br>";
+
+                	foreach($li as $value2){
+
+							if($value2['group_id']==$value1['self_id']  && $value2['level']==3){
+								//	&& $value['group_id']==$value1['group_id']){
+										echo "----------[ ".$value2['label']."][".$value2['group_id']." ]<br>";
+
+//											echo "*********[ ".$value2['group_id']."=".$value1['group_id']."]<br>";
+							}
+//						echo "***[ ".$value1['label']." ]<br>";
+//							echo "*********[ ".$li[$outer_cnt1]['label']." ]<br>";
+//							echo "-------------[ ".$li[$outer_cnt]['label']." ]!!!<br>";
+//							$s_sub[]['items'] = $li[$outer_cnt1];
+//							$outer_cnt1++;
+//						}
+					}
+					
+				}
+			}
+
+			$s_sub[] = $cat[$outer_cnt];
+			$outer_cnt1=0;
+		}
+		$outer_cnt++;
+}
+    /*
+$outer_cnt1=0;
+$i=0;
+
+
+foreach($sub as $value)
+{
+	if($value['gid']==$li[$outer_cnt1]['gid']){
+//		echo "!!!!!!!!!!!!!!!!![ ".$value['label']." ]!!!<br>";
+			$s_sub[$outer_cnt1][]['items'] = $li[$outer_cnt1];
+		$outer_cnt1++;
+	}
+	$i++;
+}
+    
+   */
+//var_dump($s_sub);
+//die();
+
+var_dump($cat);
+var_dump($sub);
+var_dump($li);
+
+//var_dump($list);
+die();
+
+
+//echo Nav::widget($s_sub);
+//echo Nav::widget(['items' => $s_sub]);
+
+		?>
+
+    </div>
+</div>

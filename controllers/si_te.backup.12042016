@@ -1,0 +1,185 @@
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use app\models\LoginForm;
+use app\models\SignupForm;
+use app\models\ContactForm;
+use yii\widgets\Pjax;
+use yii\base\Security;
+
+
+
+class SiteController extends Controller
+{
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
+    public function actionIndex()
+    {
+        $model = new LoginForm();
+
+        return $this->render('index', [
+            	'model'=> $model,
+		]);
+    }
+
+
+	public function actionLogin()
+    {
+//        $model = new \app\models\SignupForm();
+        $model = new LoginForm();
+        //$model->id =$userid;
+        return $this->renderPartial('login', [
+//        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+	// По нажатию в модальном окне на Отправить - форма отправляется администратору на почту     
+	public function actionSubmitlogin()
+    {
+//        $model = new \app\models\SignupForm();
+        $model = new LoginForm();
+        $model->load(Yii::$app->request->post());
+     
+     //   if($model->load(Yii::$app->request->post()) && 	
+	//		$model->contact(Yii::$app->params['adminEmail'])) {
+      	if($model->login()){ 
+            //save the password
+//			return $success;
+//            return json_encode(array('flag' => true, 'username' => Yii::$app->user->identity->username));
+            return json_encode(array('flag' => true, 'username' => Yii::$app->user->identity->name));
+        }
+        else
+        {
+	       // echo json_encode(array('success' => false, 'username' => ''));
+//			return json_encode($success);
+            return $this->renderPartial('login', [
+            'model' => $model,
+            ]);
+        }
+    }
+    
+
+	public function actionSignup()
+    {
+//        $model = new \app\models\SignupForm();
+        $model = new SignupForm();
+        //$model->id =$userid;
+//            return $this->render('signup', [            'model' => $model,            ]);
+        return $this->renderPartial('signup', [
+//        return $this->render('login', [
+            'model' => $model,
+        ]);
+    }
+
+	// По нажатию в модальном окне на Отправить - форма отправляется администратору на почту     
+	public function actionSubmitsignup()
+    {
+
+
+
+//        $model = new \app\models\SignupForm();
+        $model = new SignupForm();
+        $model->load(Yii::$app->request->post());
+
+//var_dump($model);
+//return json_encode('Fuck');
+
+      	if($user = $model->signup()){ 
+
+//return json_encode('Fuck A');
+
+				if(Yii::$app->getUser()->login($user)){
+//				        return json_encode(array('flag' => true, 'username' => Yii::$app->user->identity->username));
+				        return json_encode(array('flag' => true, 'username' => Yii::$app->user->identity->name));
+//	            		$success=true;
+//    			        return json_encode($success);
+				}
+        }
+        else
+        {
+            return $this->renderPartial('signup', [            'model' => $model,            ]);
+//            return $this->render('signup', [            'model' => $model,            ]);
+        }
+    }
+
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
+
+    public function actionContact()
+    {
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
+            Yii::$app->session->setFlash('contactFormSubmitted');
+
+            return $this->refresh();
+        }
+        return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAbout()
+    {
+        return $this->render('about');
+    }
+
+	public function actionFormSubmission()
+    {
+        $security = new Security();
+        $string = Yii::$app->request->post('string');
+        $stringHash = '';
+        if (!is_null($string)) {
+            $stringHash = $security->generatePasswordHash($string);
+        }
+        return $this->render('index', [
+            'stringHash' => $stringHash,
+        ]);
+    }
+
+}
+

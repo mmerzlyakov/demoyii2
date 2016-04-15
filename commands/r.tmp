@@ -1,0 +1,23 @@
+
+        $auth->addChild($GodMode, $takeOrder);
+        $auth->addChild($GodMode, $statusOrder);
+        $auth->addChild($GodMode, $updateOrder);
+        $auth->addChild($GodMode, $viewOrder);
+        $auth->addChild($GodMode, $cancelOrder);
+        $auth->addChild($GodMode, $createGood);
+        $auth->addChild($GodMode, $updateGood);
+        $auth->addChild($GodMode, $cancelGood);
+        $auth->addChild($GodMode, $commissionGood);
+        $auth->addChild($GodMode, $approveGood);
+        $auth->addChild($GodMode, $updateShopInfo);
+        $auth->addChild($GodMode, $updateShopWarehouse);
+        $auth->addChild($GodMode, $createShop);
+        $auth->addChild($GodMode, $cancelShop);
+        $auth->addChild($GodMode, $viewReports);
+        $auth->addChild($GodMode, $updateReports);
+        $auth->addChild($GodMode, $viewBilling);
+        $auth->addChild($GodMode, $updateBilling);
+        $auth->addChild($GodMode, $viewDelivery);
+        $auth->addChild($GodMode, $updateDelivery);
+        $auth->addChild($GodMode, $updateDeliveryCost);
+
