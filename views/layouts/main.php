@@ -200,7 +200,7 @@ $list['items']['items']['label'] = '4';
 $list['items']['items']['label'] = '5';
 $list['items']['items']['label'] = '6';
 */
-//var_dump($list);die();
+
 
 
 ?>
@@ -346,6 +346,7 @@ $list['items']['items']['label'] = '6';
  
 $list = Yii::$app->controller->getStructure();
 
+//var_dump($list);die();
 
 echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => $list]);
 

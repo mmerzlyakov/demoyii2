@@ -23,20 +23,12 @@ $this->title = 'My Yii Application';
     <div class="body-content">
  
 		<?php
-
-
-
-        NavBar::begin([
-//        'brandLabel' => 'My Company',
-//        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar navbar-default'],
-        ]);
+/*
+        echo "<pre>";
+print_r($list);
+        echo "</pre>";*/
 
         echo Menu::widget(['items' => $list]);
-
-
-        NavBar::end();
-
 
 
 		?>
