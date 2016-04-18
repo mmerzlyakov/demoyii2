@@ -12,7 +12,8 @@ use app\models\LoginForm;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\ButtonDropdown;
 use yii\widgets\Pjax;
-use yii\widgets\Menu;
+//use yii\widgets\Menu;
+use app\models\Menu;
 
 AppAsset::register($this);
 ?>
@@ -344,7 +345,7 @@ $list['items']['items']['label'] = '6';
 		'options' => ['class' => 'navbar navbar-default'],
     ]);
  
-$list = //Yii::$app->controller->s  getStructure();
+$list = Menu::getStructure();
 
 //var_dump($list);die();
 

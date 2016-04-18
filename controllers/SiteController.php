@@ -59,7 +59,7 @@ class SiteController extends Controller
         $model = new LoginForm();
 
 
-		$list = $this->getStructure(10000006,true);
+		$list = Menu::getStructure(10000006,true);
 
         return $this->render('index', [
             	'model'=> $model,
