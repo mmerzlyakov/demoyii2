@@ -13,6 +13,10 @@ $config = [
                     'class' => 'yii\smarty\ViewRenderer',
                     //'cachePath' => '@runtime/Smarty/cache',
                 ],
+                'html' => [
+                    'class' => 'yii\smarty\ViewRenderer',
+                    //'cachePath' => '@runtime/Smarty/cache',
+                ],
             ],
         ],
         'request' => [
