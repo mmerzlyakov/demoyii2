@@ -344,7 +344,7 @@ $list['items']['items']['label'] = '6';
 		'options' => ['class' => 'navbar navbar-default'],
     ]);
  
-$list = Yii::$app->controller->getStructure();
+$list = //Yii::$app->controller->s  getStructure();
 
 //var_dump($list);die();
 
