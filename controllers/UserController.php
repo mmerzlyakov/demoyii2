@@ -10,12 +10,16 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Query;
+use app\models\Menu;
 
 /**
  * UserController implements the CRUD actions for Useradmin model.
  */
 class UserController extends Controller
 {
+
+    public $catalogMenu;
+
     public function behaviors()
     {
         return [
@@ -26,6 +30,11 @@ class UserController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function init() {
+        $this->catalogMenu = Menu::getStructure();
+        parent::init();
     }
 
     public function actionGogome()

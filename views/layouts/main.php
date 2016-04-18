@@ -42,8 +42,7 @@ $(document).ready(function () {
          
         var url = 'login';
         var clickedbtn = $(this);
-        //var UserID = clickedbtn.data("userid");
-         
+
         var modalContainer = $('#my-modal');
         var modalBody = modalContainer.find('.modal-body');
         modalContainer.modal({show:true});
@@ -60,10 +59,6 @@ $(document).ready(function () {
     });
 
     $(document).on("submit", '.login-form', function (e) {
-
-//		$("#loginform-phone").mask("(999) 999");
-//		console.log($("#loginform-phone").val());		
-
         e.preventDefault();
         var form = $(this);
         var result;
@@ -73,8 +68,6 @@ $(document).ready(function () {
 			scriptCharset: "utf-8",
             data: form.serialize(),
             success: function (data) {
-
-//				console.log(data);
                     var modalContainer = $('#my-modal');
     		        var modalBody = modalContainer.find('.modal-body');
 					var insidemodalBody = modalContainer.find('.gb-user-form');
@@ -82,8 +75,7 @@ $(document).ready(function () {
 				{
 	                result = jQuery.parseJSON(data);
     				console.log(result);
-				//	alert(result.username);
-	                       
+
 					if (result.flag == true) {
 						insidemodalBody.html(result).hide(); 
 						$('#my-modal').modal('hide');
@@ -93,12 +85,9 @@ $(document).ready(function () {
 						$('#signup').css("display", "none");
 
 						return true;
-//						alert(result);
-//						return window.location.reload();
 					}
                 }
 				catch(e){
-				//	alert(decodeURI(result[2]));
                     modalBody.html(data).hide().fadeIn();
 					return true;
 	            }
@@ -106,15 +95,12 @@ $(document).ready(function () {
         });
     });
 
-
-
     $('#signup').click(function(event){ // нажатие на кнопку - выпадает модальное окно
         event.preventDefault();
          
         var url = 'signup';
         var clickedbtn = $(this);
-        //var UserID = clickedbtn.data("userid");
-         
+
         var modalContainer = $('#signup-modal');
         var modalBody = modalContainer.find('.modal-body');
         modalContainer.modal({show:true});
@@ -139,11 +125,9 @@ $(document).ready(function () {
 			scriptCharset: "utf-8",
             data: form.serialize(),
             success: function (data) {
-
-//				console.log(data);
-                    var modalContainer = $('#signup-modal');
-    		        var modalBody = modalContainer.find('.modal-body');
-					var insidemodalBody = modalContainer.find('.gb-user-form');
+                var modalContainer = $('#signup-modal');
+                var modalBody = modalContainer.find('.modal-body');
+                var insidemodalBody = modalContainer.find('.gb-user-form');
 				try
 				{
 	                result = jQuery.parseJSON(data);
@@ -159,12 +143,9 @@ $(document).ready(function () {
 						$('#signup').css("display", "none");
 
 						return true;
-//						alert(result);
-//						return window.location.reload();
 					}
                 }
 				catch(e){
-				//	alert(decodeURI(result[2]));
                     modalBody.html(data).hide().fadeIn();
 					return true;
 	            }
@@ -176,35 +157,11 @@ $(document).ready(function () {
 });
 	</script>
 
-
 </head>
 <body>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-
-<?php
-
-
-/*
-
-$list['options']['id'] = 'topnav';
-$list['options']['class'] = 'navbar-default center-block text-center';
-$list['options']['label'] = 'menu';
-$list['items']['label'] = 'Деятельность';
-$list['items']['url'] = '/site/activities';
-$list['items']['options']['id'] = 'down_menu';
-$list['items']['items']['label'] = '1';
-$list['items']['items']['label'] = '2';
-$list['items']['items']['label'] = '3';
-$list['items']['items']['label'] = '4';
-$list['items']['items']['label'] = '5';
-$list['items']['items']['label'] = '6';
-*/
-
-
-
-?>
     <?php
     NavBar::begin([
         'brandLabel' => 'My Company',
@@ -223,31 +180,12 @@ $list['items']['items']['label'] = '6';
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'options'=> ['id'=>'login']];
         $menuItems[] = ['label' => 'Регистрация', 'options' => ['id'=>'signup']];
-//        $menuItems[] = ['label' => 'Вход', 'url' => '/site/login'];
-//        $menuItems[] = ['label' => 'Регистрация', 'url' => '/site/signup'];
-//		$menuItems[] = "<b>".Html::a('', '/site/logout', ['id'=>'userlabel'])."</b>";
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton('',['class' => 'btn btn-link' , 'id' => 'userlabel'])
             . Html::endForm()
             . '</li>';  
     }
-   /*
-    else {
-//		$menuItems[] = "<b>".Html::a(Yii::$app->user->identity->username.' / Выход', '/site/logout', ['id'=>'userlabel'])."</b>";
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-//                '' . Yii::$app->user->identity->username . ' / Выход',
-                '' . Yii::$app->user->identity->name . ' / Выход',
-                ['class' => 'btn btn-link' ,'id' => 'userlabel']
-            )
-            . Html::endForm()
-            . '</li>';  
-    }*/
-
-
-
 
     if(Yii::$app->user->can('GodMode'))
     {
@@ -325,37 +263,18 @@ $list['items']['items']['label'] = '6';
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-//$list = getStructure();
-
-?>
-    <div class="container">
-
-<?php
-
-    NavBar::begin([
-//        'brandLabel' => 'My Company',
-//        'brandUrl' => Yii::$app->homeUrl,
-		'options' => ['class' => 'navbar navbar-default'],
-    ]);
- 
-$list = Menu::getStructure();
-
-//var_dump($list);die();
-
-echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => $list]);
-
-    NavBar::end();
-
-////////////////////////////////////////////////////////////////////////////////
     ?>
+    <div class="container">
+        <?php
+        NavBar::begin([
+            'options' => ['class' => 'navbar navbar-default'],
+        ]);
+        $list = Menu::getStructure();
 
+        echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
+
+        NavBar::end();
+        ?>
     </div>
 
     <div class="container">

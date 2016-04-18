@@ -18,6 +18,9 @@ use app\models\Menu;
 
 class SiteController extends Controller
 {
+
+    public $catalogMenu;
+
     public function behaviors()
     {
         return [
@@ -41,6 +44,11 @@ class SiteController extends Controller
         ];
     }
 
+    public function init() {
+        $this->catalogMenu = Menu::getStructure();
+        parent::init();
+    }
+
     public function actions()
     {
         return [
@@ -59,7 +67,8 @@ class SiteController extends Controller
         $model = new LoginForm();
 
 
-		$list = Menu::getStructure(10000006,true);
+		//$list = Yii::$app->controller->catalogMenu;
+        $list = Menu::getStructure(10000006,true);
 
         return $this->render('index', [
             	'model'=> $model,
