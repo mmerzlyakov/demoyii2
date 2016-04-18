@@ -74,7 +74,6 @@ class SiteController extends Controller
         ]);
     }
 
-	// По нажатию в модальном окне на Отправить - форма отправляется администратору на почту     
 	public function actionSubmitlogin()
     {
         $model = new LoginForm();
@@ -101,7 +100,6 @@ class SiteController extends Controller
         ]);
     }
 
-	// По нажатию в модальном окне на Отправить - форма отправляется администратору на почту     
 	public function actionSubmitsignup()
     {
 
@@ -118,7 +116,6 @@ class SiteController extends Controller
             return $this->renderPartial('signup', [            'model' => $model,            ]);
         }
     }
-
 
     public function actionLogout()
     {
@@ -163,7 +160,6 @@ class SiteController extends Controller
     /*
      *
      *
-     *  Функция выбоки данных для левой менюшки
      *  28/03/2016 by predator_pc
      *
      *
@@ -225,14 +221,11 @@ class SiteController extends Controller
    //    var_dump($tags);
      //  die();
 
-	$list = array(); // массив товаров и групп которы мы вернем контроллеру
+	$list = array();
 	$items['items'] = array();
-	$lc = 0; // внешний счетчик массива товаров и групп   //local counter
+	$lc = 0;
 
 	for($i=0; $i<count($chain_groups); $i++){
-        //
-        //Выбираем название главной группы товаров
-        //
 
 		$list[$lc]['item'] = $chain_groups[$i]['name'];
 		$list[$lc]['level'] = 1;
@@ -258,11 +251,9 @@ class SiteController extends Controller
                                     for($a=0; $a<count($links_count); $a++){
 	                                      	if($tags[$k]['id']==$links_count[$a]['tag_id']){
                             					$aval=1;
-                                                //
-                                                //Выбираем название подгруппы главной группы
-                                                //Флаг перехода и выход на уровень вверх, все остальное не категория
-                                                //
-                                                //
+
+
+
 							    				$list[$lc]['item'] = $tags[$k]['value'];
 								    			$list[$lc]['level'] = 2;
                                                 $list[$lc]['url'] = $current_url;
@@ -274,11 +265,6 @@ class SiteController extends Controller
 								         		'url' => $current_url,
 										         'id' => $current_group_id];	
 												$curr_cat = $items[$lc]['items'];
-/*
-                                                  
-												$items[$lc]['label']= $tags[$k]['value'];
-										        $items[$lc]['url'] = $current_url;
-										        $items[$lc]['id'] = $current_group_id; */
 
                                                 $lc++;
 
@@ -291,15 +277,10 @@ class SiteController extends Controller
 									}
 
                                    	if($aval==1){
-                                        //
-                                        //Обнуляем Флаг перехода для новой итерации, выбираем товар
-                                        //
                                         $aval=0;
     						        }
 									else{
-                                        //
-                                        //Выбираем название товарово на третий уровень
-                                        //
+
 										$list[$lc]['item'] = $tags[$k]['value'];
 										$list[$lc]['level'] = 3;
                                         $list[$lc]['id'] = $tags[$k]['id'];
