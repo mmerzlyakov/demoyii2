@@ -57,7 +57,7 @@ class SiteController extends Controller
     {
         $model = new LoginForm();
 
-		$list = $this->forCms();
+		$list = $this->getStructure();
 
         return $this->render('index', [
             	'model'=> $model,
@@ -155,7 +155,68 @@ class SiteController extends Controller
         ]);
     }
 
+    function getStructure()
+    {
 
+        $result = (new \yii\db\ActiveRecord())
+            ->find()
+            ->from('category')
+            ->where('')
+            ->orderby('sort ASC')
+            ->asarray()
+            ->all();
+
+//var_dump($result);
+
+//  $result = Category::find()->asArray()->all();
+
+        if (!$result) {     return NULL;  }
+
+        // $arr_cat будет создаваться массив категорий, где индексы, это parent_id
+        $arr_cat = array();
+
+        //В цикле формируем массив
+        for ($i = 0; $i < count($result);$i++) {
+            $row = $result[$i];
+            if ($row['parent_id'] == NULL)
+                $row['parent_id'] = 0;
+            //Формируем массив, где ключами являются id родительской категории
+            if (empty($arr_cat[$row['parent_id']]))
+                $arr_cat[$row['parent_id']] = array();
+
+            $arr_cat[$row['parent_id']][] = $row;
+        }
+
+// $view_cat - лямда функция для создания массива категорий, который будет передан в отображение
+        $view_cat =
+
+            function ($data, $parent_id = 0) use ( & $view_cat){
+
+                $result = NULL;
+                if (empty($data[$parent_id])) {
+                    return;
+                }
+
+                $result = array();
+
+                //перебираем в цикле массив и выводим на экран
+                for ($i = 0; $i < count($data[$parent_id]);$i++) {
+                    $result[] = ['label' => $data[$parent_id][$i]['title'],
+                                 'url' => 'catalog/'.$data[$parent_id][$i]['alias'].'/'.$data[$parent_id][$i]['id'],
+                                 //можно пометить какой либо пункт как активный
+                                 'active' => $data[$parent_id][$i]['id'] == 8,
+                                 'options' => ['class' => 'dropdown' ],
+                                 'items' => $view_cat($data,$data[$parent_id][$i]['id'])];
+
+                    //рекурсия - проверяем нет ли дочерних категорий
+
+                }
+                return $result;
+            };
+
+        $result = $view_cat($arr_cat);
+        return $result;
+    }
 
     /*
      *

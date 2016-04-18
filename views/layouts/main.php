@@ -10,6 +10,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\LoginForm;
 use yii\bootstrap\ActiveForm;
+use yii\bootstrap\ButtonDropdown;
 use yii\widgets\Pjax;
 use yii\widgets\Menu;
 
@@ -128,26 +129,6 @@ $(document).ready(function () {
     });
 
 
-          /*
-            success: function (result) {
-                console.log(result);
-                var modalContainer = $('#signup-modal');
-                var modalBody = modalContainer.find('.modal-body');
-				var insidemodalBody = modalContainer.find('.gb-user-form');
-
-				if (result == 'true') {
-					insidemodalBody.html(result).hide(); 
-					$('#signup-modal').modal('hide');
-					return window.location.reload();
-
-                }
-                else {
-                    modalBody.html(result).hide().fadeIn();
-                }
-            }
-
-              */
-
     $(document).on("submit", '.signup-form', function (e) {
         e.preventDefault();
         var form = $(this);
@@ -222,8 +203,6 @@ $list['items']['items']['label'] = '6';
 //var_dump($list);die();
 
 
-
-
 ?>
     <?php
     NavBar::begin([
@@ -237,7 +216,7 @@ $list['items']['items']['label'] = '6';
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'User management', 'url' => ['/user']],
+        //['label' => 'User management', 'url' => ['/user']],
 
     ];
     if (Yii::$app->user->isGuest) {
@@ -251,7 +230,9 @@ $list['items']['items']['label'] = '6';
             . Html::submitButton('',['class' => 'btn btn-link' , 'id' => 'userlabel'])
             . Html::endForm()
             . '</li>';  
-    } else {
+    }
+   /*
+    else {
 //		$menuItems[] = "<b>".Html::a(Yii::$app->user->identity->username.' / Выход', '/site/logout', ['id'=>'userlabel'])."</b>";
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -262,87 +243,95 @@ $list['items']['items']['label'] = '6';
             )
             . Html::endForm()
             . '</li>';  
+    }*/
+
+
+
+
+    if(Yii::$app->user->can('GodMode'))
+    {
+        $menuItems[] = '<li>'
+        .    ButtonDropdown::widget([
+            'label' => Yii::$app->user->identity->name." / ".Yii::$app->user->identity->phone,
+            'options' => [
+                'class' => 'btn-lg btn-default',
+                //'class' => 'btn btn-mini',
+                'style' => 'margin:5px',
+                'id' => 'userlabel',
+            ],
+            'dropdown' => [
+               // 'class' => 'btn btn-mini dropdown-toggle',
+                'items' => [
+                    [
+                        'label' => 'Мои адреса',
+                        'url' => '#'
+                    ],
+                    [
+                        'label' => 'Операции с балансом',
+                        'url' => '#'
+                    ],
+
+                    [
+                        'label' => 'Управление пользователями',
+                        'url' => '/user'
+                    ],
+                    [
+                        'label' => 'Управление магазином',
+                        'url' => '#'
+                    ],
+
+                    [
+                        'label' => 'История заказов',
+                        'url' => '#'
+                    ],
+                    [
+                        'label' => 'Промо код',
+                        'url' => '#'
+                    ],
+                    [
+                        'label' => 'Избранные товары',
+                        'url' => '#'
+                    ],
+                    [
+                        'label' => 'Обратная связь',
+                        'url' => '#'
+                    ],
+                    [
+                        'label' => '',
+                        'options' => [
+                            'role' => 'presentation',
+                            'class' => 'divider'
+                        ]
+                    ],
+                    [
+                        'label' => 'Выход из системы',
+                        'url' => '/site/logout',
+                        'linkOptions' => ['data-method' => 'post'],
+                    ]
+                ]
+            ]
+        ])
+        .'</li>';
+
     }
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,
     ]);
-    NavBar::end();
 
+    NavBar::end();
 
 ////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-	           
-
- function getStructure()
- {
-
-$result = (new \yii\db\ActiveRecord())
-	->find()
-	->from('category')
-	->where('')
-	->orderby('sort ASC')
-	->asarray()
-	->all();
-
-//var_dump($result);
-
-//  $result = Category::find()->asArray()->all();
-
-  if (!$result) {     return NULL;  }
-
-  // $arr_cat будет создаваться массив категорий, где индексы, это parent_id
-  $arr_cat = array();
-
-  //В цикле формируем массив
-  for ($i = 0; $i < count($result);$i++) {
-			   $row = $result[$i];
-			   if ($row['parent_id'] == NULL)
-					   $row['parent_id'] = 0;
-			   //Формируем массив, где ключами являются id родительской категории
-			   if (empty($arr_cat[$row['parent_id']])) 
-					    $arr_cat[$row['parent_id']] = array();
-
-		   $arr_cat[$row['parent_id']][] = $row;
-  }
-
-// $view_cat - лямда функция для создания массива категорий, который будет передан в отображение
-  $view_cat =
-
-  function ($data, $parent_id = 0) use ( & $view_cat){
-
-   $result = NULL;
-   if (empty($data[$parent_id])) {
-		   return;
-   }
-
-   $result = array();
-
-   //перебираем в цикле массив и выводим на экран
-   for ($i = 0; $i < count($data[$parent_id]);$i++) {
-    $result[] = ['label' => $data[$parent_id][$i]['title'],
-     'url' => 'catalog/'.$data[$parent_id][$i]['alias'].'/'.$data[$parent_id][$i]['id'],
-      //можно пометить какой либо пункт как активный     
-     'active' => $data[$parent_id][$i]['id'] == 8,
-     'options' => ['class' => 'dropdown' ],
-     'items' => $view_cat($data,$data[$parent_id][$i]['id'])];
-
-    //рекурсия - проверяем нет ли дочерних категорий
-
-   }
-  return $result;
-  };
-
-  $result = $view_cat($arr_cat);
-  return $result;
-}
 
 
-$list = getStructure();
+
+
+//$list = getStructure();
 
 ?>
     <div class="container">
@@ -355,7 +344,7 @@ $list = getStructure();
 		'options' => ['class' => 'navbar navbar-default'],
     ]);
  
-
+$list = Yii::$app->controller->getStructure();
 
 
 echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => $list]);
