@@ -67,8 +67,12 @@ class UserController extends Controller
 		$model->load($query);
 		$model->attributes = $query;
 
+        $modelAA = authItem::find()->one();
+
         return $this->render('view', [
             'model' => $model,
+            'modelAA' => $modelAA,
+            'modelAI' => $modelAI
         ]);
     }
 
