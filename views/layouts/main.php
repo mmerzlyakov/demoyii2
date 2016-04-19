@@ -12,6 +12,7 @@ use app\models\LoginForm;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\ButtonDropdown;
 use yii\widgets\Pjax;
+use yii\bootstrap\Button;
 //use yii\widgets\Menu;
 use app\models\Menu;
 
@@ -79,11 +80,12 @@ $(document).ready(function () {
 					if (result.flag == true) {
 						insidemodalBody.html(result).hide(); 
 						$('#my-modal').modal('hide');
-						$('#userlabel').text(result.username + " / Выход");
+                        /*$('#userlabel').label(result.username + " / " + result.phone);
+                        $('#userlabel').css("display","block");
 	
 						$('#login').css("display", "none");
-						$('#signup').css("display", "none");
-
+						$('#signup').css("display", "none");*/
+                        location.reload();
 						return true;
 					}
                 }
@@ -137,11 +139,12 @@ $(document).ready(function () {
 					if (result.flag == true) {
 						insidemodalBody.html(result).hide(); 
 						$('#signup-modal').modal('hide');
-						$('#userlabel').text(result.username + " / Выход");
+						/*$('#userlabel').text(result.username + " / "+result.phone);
+                        $('#userlabel').css("display","block");
 
 						$('#login').css("display", "none");
 						$('#signup').css("display", "none");
-
+                           */ location.reload();
 						return true;
 					}
                 }
@@ -164,20 +167,20 @@ $(document).ready(function () {
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'ExtremeShop',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
+        //['label' => 'Home', 'url' => ['/site/index']],
+        //['label' => 'About', 'url' => ['/site/about']],
+        //['label' => 'Contact', 'url' => ['/site/contact']],
         //['label' => 'User management', 'url' => ['/user']],
 
     ];
-    if (Yii::$app->user->isGuest) {
+    /*if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'options'=> ['id'=>'login']];
         $menuItems[] = ['label' => 'Регистрация', 'options' => ['id'=>'signup']];
         $menuItems[] = '<li>'
@@ -185,74 +188,130 @@ $(document).ready(function () {
             . Html::submitButton('',['class' => 'btn btn-link' , 'id' => 'userlabel'])
             . Html::endForm()
             . '</li>';  
+    }*/
+
+    $subItems = [];
+
+    if(!Yii::$app->user->isGuest) {
+
+
+        $subItems[] = [
+            'label' => 'Мои адреса',
+            'url'   => '#'
+        ];
+        $subItems[] = [
+            'label' => 'Операции с балансом',
+            'url'   => '#'
+        ];
+
     }
 
-    if(Yii::$app->user->can('GodMode'))
-    {
+    if(Yii::$app->user->can('GodMode')){
+
+            $subItems[] =
+                            [
+                                'label' => 'Управление пользователями',
+                                'url' => '/user'
+                            ];
+
+
+            $subItems[] =   [
+                                'label' => 'Управление магазином',
+                                'url' => '#'
+                            ];
+    }
+
+    if(!Yii::$app->user->isGuest) {
+    $subItems[] =   [
+                        'label' => 'История заказов',
+                         'url' => '#'
+                            ];
+    $subItems[] =   [
+                         'label' => 'Промо код',
+                                'url' => '#'
+                            ];
+    $subItems[] =   [
+                                'label' => 'Избранные товары',
+                                'url' => '#'
+                            ];
+    $subItems[] =   [
+                                'label' => 'Обратная связь',
+                                'url' => '#'
+                            ];
+    $subItems[] =   [
+                                'label' => '',
+                                'options' => [
+                                    'role' => 'presentation',
+                                    'class' => 'divider'
+                                ]
+                            ];
+
+    $subItems[] = [
+            'label'       => 'Выход из системы',
+            'url'         => '/site/logout',
+            'linkOptions' => ['data-method' => 'post'],
+        ];
+    }
+
+   // var_dump($subItems);die();
+
+    if(!Yii::$app->user->isGuest) {
+
+
+        $label = Yii::$app->user->identity->name . " / ". Yii::$app->user->identity->phone;
+        $style = 'margin:5px;';
+
+       // $idDB = 'userlabel';
+    }
+    else {
+
+        $label = '';
+        $style = 'margin: 5px;';
+     //   $idDB = 'signup';
+
         $menuItems[] = '<li>'
+            . Button::widget(
+                [
+                    'label'   => 'Вход',
+                    'options' => [
+                        'class' => 'btn-lg btn-default',
+                        'style' => 'margin:5px',
+                        'id'    => 'login',
+                    ],
+                ]
+            )
+            . '</li>';
+
+        $menuItems[] = '<li>'
+            . Button::widget(
+                [
+                    'label'   => 'Регистрация',
+                    'options' => [
+                        'class' => 'btn-lg btn-default',
+                        'style' => 'margin:5px',
+                        'id'    => 'signup',
+                    ],
+                ]
+            )
+            . '</li>';
+    }
+
+
+    $menuItems[] = '<li>'
         .    ButtonDropdown::widget([
-            'label' => Yii::$app->user->identity->name." / ".Yii::$app->user->identity->phone,
+            'label' => $label,
             'options' => [
                 'class' => 'btn-lg btn-default',
-                //'class' => 'btn btn-mini',
-                'style' => 'margin:5px',
+                'style' => 'margin: 5px;',
                 'id' => 'userlabel',
             ],
             'dropdown' => [
-               // 'class' => 'btn btn-mini dropdown-toggle',
-                'items' => [
-                    [
-                        'label' => 'Мои адреса',
-                        'url' => '#'
-                    ],
-                    [
-                        'label' => 'Операции с балансом',
-                        'url' => '#'
-                    ],
-
-                    [
-                        'label' => 'Управление пользователями',
-                        'url' => '/user'
-                    ],
-                    [
-                        'label' => 'Управление магазином',
-                        'url' => '#'
-                    ],
-
-                    [
-                        'label' => 'История заказов',
-                        'url' => '#'
-                    ],
-                    [
-                        'label' => 'Промо код',
-                        'url' => '#'
-                    ],
-                    [
-                        'label' => 'Избранные товары',
-                        'url' => '#'
-                    ],
-                    [
-                        'label' => 'Обратная связь',
-                        'url' => '#'
-                    ],
-                    [
-                        'label' => '',
-                        'options' => [
-                            'role' => 'presentation',
-                            'class' => 'divider'
-                        ]
-                    ],
-                    [
-                        'label' => 'Выход из системы',
-                        'url' => '/site/logout',
-                        'linkOptions' => ['data-method' => 'post'],
-                    ]
-                ]
+                //'class' => $style,
+                'items' => $subItems,
             ]
         ])
         .'</li>';
 
-    }
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -280,8 +339,9 @@ $(document).ready(function () {
     <div class="container">
 
         <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+            'homeLink' => ['label' => 'Главная', 'url' => '/'],
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],   ]) ?>
+
         <?= $content ?>
 	
     </div>
@@ -289,7 +349,7 @@ $(document).ready(function () {
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; ExtremeShop <?= date('Y') ?></p>
 
 
 <!-- Modal "Записаться на занятия" -->

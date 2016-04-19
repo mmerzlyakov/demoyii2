@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
 use Yii;
 use app\models\Useradmin;
 use app\models\UserSearch;
@@ -86,19 +87,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function actionCreate()
+    /*public function actionCreate()
     {
-        $model = new Useradmin();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-						$model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+        $model = new SignupForm();
+        return $this->render('/site/signup', [
+            'model' => $model,
+        ]);
+    }*/
 
     public function actionUpdate($id)
     {
@@ -116,6 +111,11 @@ class UserController extends Controller
         if ($model->load(Yii::$app->request->post())){
             if(isset($model->password) && !empty($model->password)){
                 $user = User::findById($id);
+
+                //echo $id;
+                //var_dump($user);die();
+                //$user = UserAdmin::findByPhone($model->phone);
+
                 $user->setPassword($model->password);
 
                 $user->save();

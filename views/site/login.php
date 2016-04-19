@@ -26,8 +26,15 @@ use yii\widgets\MaskedInput;
     <?php //= $form->field($model, 'username')->textInput(['maxlength' => 255], ['class' => 'input-modal']) ?>
 
     <?php //= $form->field($model, 'phone')->widget(MaskedInput::className(), ['mask' => '+79999999999',]) ?>
-  
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => 11], ['autofocus' => true], ['class' => 'input-modal', 'id' => 'phone'])->label('Номер телефона') ?>
+
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tr>
+            <td><img src="/images/7.gif"></td>
+            <td><?= $form->field($model, 'phone')->textInput(['maxlength' => 10], ['autofocus' => true], ['class' => 'input-modal', 'id' => 'phone'])->label('Номер телефона') ?></td>
+        </tr>
+    </table>
+
+
     
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255], ['class' => 'input-modal'])->label('Пароль') ?>

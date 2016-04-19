@@ -30,9 +30,10 @@ use yii\validators\UniqueValidator;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
+    const STATUS_ACTIVE = 1;
 	public $city_id = 1001;
 	public $store_id = 0;
+    public $role;
 
 
     /**

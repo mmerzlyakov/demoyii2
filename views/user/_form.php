@@ -15,7 +15,7 @@ use app\models\AuthItem;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'phone')->textInput(['rows' => 6]) ?>
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => 10], ['autofocus' => true]) ?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'password')->passwordInput()->label('Новый пароль')->hint('Оставьте без изменений, если не нужно менять') ?>
 
@@ -31,7 +31,7 @@ use app\models\AuthItem;
 		
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

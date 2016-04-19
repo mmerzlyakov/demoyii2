@@ -6,9 +6,12 @@ use yii\helpers\Html;
 /* @var $model app\models\Useradmin */
 
 $this->title = 'Администрирование пользователей (редактирование): ' . ' ' . $model->id;
+
+//var_dump($this->params);
+$this->params['breadcrumbs']='';
 $this->params['breadcrumbs'][] = ['label' => 'Администрирование пользователей', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактирование';
 
 //var_dump($_SESSION['filter']);
 //die();

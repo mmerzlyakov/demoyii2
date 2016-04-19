@@ -42,7 +42,7 @@ class UserAdmin extends \yii\db\ActiveRecord
             [['name', 'role_description', 'role', 'password', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['email'],'email', 'message' => 'Введите адрес электронной почты правильно!'],
-			[['role_description', 'role', 'role_name', 'email'], 'safe'],
+			[['role_description', 'role', 'role_name', 'email', 'password'], 'safe'],
         ];
     }
 
@@ -68,12 +68,22 @@ class UserAdmin extends \yii\db\ActiveRecord
 
     public static function findById($id)
     {
-        return static::findOne(['id' => $id]);
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     public function getAuth_Assignment()
     {
         return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+    }
+
+    public static function findByPhone($phone)
+    {
+        return static::findOne(['phone' => $phone]);
+    }
+
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     public function getAuth_item()

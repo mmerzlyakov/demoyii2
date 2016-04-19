@@ -11,7 +11,8 @@ use Yii;
 class SignupForm extends Model
 {
 	public $phone;
-//    public $username;
+    public $role;
+    public $isNewRecord = true;
     public $name;
     public $email;
     public $password;
@@ -26,7 +27,7 @@ class SignupForm extends Model
   //          ['username', 'filter', 'filter' => 'trim'],
             ['phone', 'required', 'message' => 'Введите телефон!'],
             ['phone', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Такой номер телефона уже зарегистрирован'],
-            ['phone', 'string', 'min' => 7, 'max' => 12, 'tooShort' => 'Номер телефона от 7 до 10 цифр!'],
+            ['phone', 'string', 'min' => 10, 'max' => 10, 'tooShort' => 'Номер телефона 10 цифр без пробелов и дефисов!'],
 
 /*
 * Родная валидация
