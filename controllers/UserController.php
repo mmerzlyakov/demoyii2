@@ -11,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Query;
 use app\models\Menu;
+use app\models\AuthAssignment;
+use app\models\AuthItem;
 
 /**
  * UserController implements the CRUD actions for Useradmin model.
@@ -55,7 +57,7 @@ class UserController extends Controller
 
     public function actionView($id)
     {
-		$model = new UserAdmin();
+/*		$model = new UserAdmin();
 		$query = Useradmin::find()
 					->select('users.*, auth_item.name as role_name, auth_item.description as role_description')
 					->leftjoin('auth_Assignment','`auth_Assignment`.`user_id` = `users`.`id`')
@@ -65,14 +67,22 @@ class UserController extends Controller
 					->one();
 
 		$model->load($query);
-		$model->attributes = $query;
 
-        $modelAA = authItem::find()->one();
+        $model->attributes = $query;
+*/
+        $model = $this->findModel($id);
+
+        //$roles = Yii::$app->authManager->roles;
+        $model->role = \Yii::$app->authManager->getRolesByUser($id);
+
+        if(empty($model->role))
+            $model->role = 'Пользователь';
+        else
+            $model->role = $model->role[key($model->role)]->description;
 
         return $this->render('view', [
             'model' => $model,
-            'modelAA' => $modelAA,
-            'modelAI' => $modelAI
+            //'role' => $role,
         ]);
     }
 
@@ -91,6 +101,50 @@ class UserController extends Controller
     }
 
     public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        $roles = Yii::$app->authManager->roles;
+        $model->role = \Yii::$app->authManager->getRolesByUser($id);
+
+        if(empty($model->role))
+            $model->role = ['name'=>'user', 'description' => 'Пользователь'];
+        else
+            $model->role = $model->role[key($model->role)]->name;
+
+
+        if ($model->load(Yii::$app->request->post())){
+            if(isset($model->password) && !empty($model->password)){
+                $user = User::findById($id);
+                $user->setPassword($model->password);
+
+                $user->save();
+            }
+
+             $auth = Yii::$app->authManager;
+            $role = $auth->getRole($model->role);
+            $auth->revokeAll($id);
+            $auth->assign($role,$id);
+
+           // var_dump($model);die();
+
+            if($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                return $this->render('update', [
+                    'model' => $model,
+                    'roles' => $roles,
+                ]);
+            }
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'roles' => $roles,
+            ]);
+        }
+    }
+
+    public function action1Update1($id)
     {
 		$model = $this->findModel($id);
 //var_dump($model);die();

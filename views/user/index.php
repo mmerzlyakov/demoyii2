@@ -38,7 +38,7 @@ Yii::$app->session['filter']=$_SERVER['REQUEST_URI'];
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить Пользователя +', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php //=Html::a('Добавить Пользователя +', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Роли', ['roles'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Разрешения', ['permissions'], ['class' => 'btn btn-success']) ?>
     </p>

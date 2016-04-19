@@ -25,7 +25,6 @@ use Yii;
 
 class UserAdmin extends \yii\db\ActiveRecord
 {      	
-//	public $id;
 	public $role_description;
 	public $role;
 	public $role_name;
@@ -37,12 +36,13 @@ class UserAdmin extends \yii\db\ActiveRecord
     {
         return [
             [['id','phone'], 'unique', 'message' => 'Такой телефон уже зергистрирован'],
-            [['id', 'name','phone', 'role_description','role'], 'required'],
+            [['id', 'name','phone', 'role'], 'required'],
             [['name', 'phone','role_description','role_name','role' ], 'string'],
             [['id','status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'role_description', 'role', 'password', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-			[['role_description', 'role', 'role_name'], 'safe'],
+            [['email'],'email', 'message' => 'Введите адрес электронной почты правильно!'],
+			[['role_description', 'role', 'role_name', 'email'], 'safe'],
         ];
     }
 
@@ -50,52 +50,38 @@ class UserAdmin extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Пользователь',
-//            'fullname' => 'ФИО',
-            'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
-            'password_reset_token' => 'Password Reset Token',
-            'email' => 'Email',
-            'phone' => 'Phone',
-			'password' => 'Password',
-            'status' => 'Status',
+            'name' => 'Имя пользователя',
+            'auth_key' => 'Ключ авторизации',
+            'password_hash' => 'Пароль хеш',
+            'password_reset_token' => 'Запрос сброса пароля',
+            'email' => 'E-mail',
+            'phone' => 'Телефон',
+			'password' => 'Пароль',
+            'status' => 'Статус пользователя',
 		    'role_description' => 'Role', 
 			'role_name' => 'Rolename',
 			'role' => 'Роль',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'created_at' => 'Создан',
+            'updated_at' => 'Обновлен',
         ];
-    }  
+    }
 
-	public function afterSave($insert, $model)
-	{
-        $user = User::findOne(['id' => $this->id]);
-		$user->setPassword($this->password);
-		$user->save();
-
-//var_dump($this);die();
-
-        $auth = Yii::$app->authManager;
-        $role = $auth->getRole($this->role);
-        $auth->assign($role, $this->id);
-
-		parent::afterSave($insert, $model);
-
-	 	return true;
-	}
+    public static function findById($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
 
     public function getAuth_Assignment()
     {
         return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
-//        return $this->hasOne('auth_assignment', ['user_id' => 'id']);
     }
 
     public function getAuth_item()
     {
+    // Вариантики
 //        return $this->hasOne(AuthItem::className(), ['name' => 'item_name']);
-        return $this->hasOne(AuthItem::className(), ['description' => 'role_description']);
 //        return $this->hasMany(AuthItem::className(), ['description' => 'role_description']);
-//        return $this->hasOne('auth_assignment', ['user_id' => 'id']);
+        return $this->hasOne(AuthItem::className(), ['description' => 'role_description']);
     }
 
     public static function find()
