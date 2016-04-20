@@ -7,6 +7,7 @@ use app\models\LoginForm;
 use app\models\Menu;
 use app\models\SignupForm;
 use app\models\Category;
+use app\models\User;
 
 use Yii;
 use yii\base\Security;
@@ -31,7 +32,7 @@ class SiteController extends Controller
                 'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['addon, logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -41,11 +42,12 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                    'addon' => ['get'],
                 ],
             ],
         ];
     }
-
+                
     public function init() {
         $this->catalogHash = Category::find()->where(['active' => 1])->orderBy('level, sort')->indexBy('id')->asArray()->all();
         $urls = [];
@@ -67,6 +69,16 @@ class SiteController extends Controller
             ],
         ];
     }
+
+	public function actionAddon($id,$value)
+	{
+//			echo "[".$posts[$i]['id'].",'".$posts[$i]['street']."','".$posts[$i]['house']."'], ";
+			$result = Yii::$app->db->createCommand('update address set delivery_id = '.$value.' where id='.$id)->execute(); 
+			return json_encode('OK');
+
+         //   Yii::$app->
+	}
+
 
     public function actionIndex()
     {

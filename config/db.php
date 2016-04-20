@@ -14,10 +14,10 @@ return [
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=192.168.0.14;dbname=shop',
-    //'dsn' => 'mysql:host=192.168.0.10;dbname=shop',
+    //'dsn' => 'mysql:host=192.168.0.14;dbname=shop',
+    'dsn' => 'mysql:host=192.168.0.10;dbname=shop',
     'username' => 'shop',
-    //'password' => '696705AC99',
-    'password' => '69670500CC',
+    'password' => '696705AC99',
+    //'password' => '69670500CC',
     'charset' => 'utf8',
 ];

@@ -7,45 +7,18 @@ use yii\widgets\ListView;
 /* @var $searchModel app\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Categories';
+$this->title = 'Каталог товаров';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="catalog-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        //'searchModel' => $searchModel,
-        'options' => [
-            'tag' => 'div',
-            'class' => 'list-wrapper',
-            'id' => 'list-wrapper',
-        ],
-        //'layout' => "{pager}\n{items}\n{summary}\n{pager}",
-        'itemView' => function ($model, $key, $index, $widget) {
-            return $this->render('_list_item',['model' => $model]);
-        },
-        'itemOptions' => [
-            'tag' => false,
-        ],
-    ]); ?>
 
     <?php
-    /*        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'parent_id',
-            'level',
-            'title',
-            'alias',
-            // 'sort',
-            // 'active',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-*/
+    if(isset(Yii::$app->controller->catalogMenu) && !empty((Yii::$app->controller->catalogMenu))){
+        foreach((Yii::$app->controller->catalogMenu) as $menuItem){
+            print $this->render('_generalCategory',['model' => $menuItem]);
+        }
+    }
     ?>
 </div>

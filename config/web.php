@@ -64,6 +64,7 @@ $config = [
 		                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 		                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                         'signup'=>'site/signup',
+                        'addon'=>'site/addon',
                         'submitsignup'=>'site/submitsignup',
                         'login'=>'site/login',
                         'submitlogin'=>'site/submitlogin',

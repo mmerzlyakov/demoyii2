@@ -38,8 +38,9 @@ AppAsset::register($this);
         'brandLabel' => 'ExtremeShop',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-            'style'=>'width: 100%; color: #fefefe;'
+            //'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-default',
+            //'style'=>'width: 90%; color: #fefefe;'
         ],
     ]);
 
@@ -157,7 +158,9 @@ AppAsset::register($this);
         'items' => $menuItems,
     ]);
 
-    echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%;' ], 'items' => Yii::$app->controller->catalogMenu]);
+
+    echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%; alignmen' ], 'items' => Yii::$app->controller->catalogMenu]);
+
     NavBar::end();
 
     ?>

@@ -19,20 +19,10 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
     <div class="jumbotron">
+
      </div>
 
     <div class="body-content">
- 
-		<?php
-/*
-        echo "<pre>";
-print_r($list);
-        echo "</pre>";*/
-
-        echo Nav::widget(['items' => Menu::getStructure(10000006, true)]);
-
-
-		?>
 
     </div>
 </div>
