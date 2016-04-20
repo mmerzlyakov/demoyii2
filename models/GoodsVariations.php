@@ -33,6 +33,7 @@ class GoodsVariations extends \yii\db\ActiveRecord
     public $productDiscount;
     public $countPack;
     public $commissionId;
+    public $categoryId;
 
     /**
      * @inheritdoc
@@ -55,7 +56,7 @@ class GoodsVariations extends \yii\db\ActiveRecord
             [['producer_name'], 'string', 'max' => 128],
             [['price_out'], 'number'],
             [['confirm'], 'integer'],
-            [['productId','variantId','productPrice','productCommission','productDiscount','countPack','commissionId','date_create'], 'safe'],
+            [['categoryId','productId','variantId','productPrice','productCommission','productDiscount','countPack','commissionId','date_create'], 'safe'],
         ];
     }
 

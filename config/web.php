@@ -57,13 +57,17 @@ $config = [
 	        // Disable r= routes
 	        'enablePrettyUrl' => true,
 	        'rules' => array(
-						'signup'=>'site/signup',
-						'submitsignup'=>'site/submitsignup',
-						'login'=>'site/login',
-						'submitlogin'=>'site/submitlogin',
+
+                        'catalog' => 'catalog/index',
+                        'catalog/index' => 'catalog/index',
+                        'catalog/<alias:.+>'=>'catalog/view',
         		        '<controller:\w+>/<id:\d+>' => '<controller>/view',
 		                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 		                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+                        'signup'=>'site/signup',
+                        'submitsignup'=>'site/submitsignup',
+                        'login'=>'site/login',
+                        'submitlogin'=>'site/submitlogin',
 		        ),
         ],
 		 'authManager' => [

@@ -335,7 +335,7 @@ class Goods extends \yii\db\ActiveRecord
     public function findProductImage($id){
         $productImage = GoodsImages::find()->where(['good_id' => $id,'status' => 1])->orderBy('position')->one();
         if(!$productImage){
-
+            //$productImage = GoodsImages::find()->where(['good_id' => $id,'status' => 1])->orderBy('position')->one();
         }else{
             return $productImage->id;
         }
@@ -349,7 +349,7 @@ class Goods extends \yii\db\ActiveRecord
 
         }else{
             foreach($productImages as $image){
-                $result[$image->good_id] = $image->id;
+                $result[$image->good_id][] = $image->id;
             }
             return $result;
         }
@@ -357,7 +357,7 @@ class Goods extends \yii\db\ActiveRecord
     }
 
     // Обработка наклеек;
-    function findProductStickers($ids,$data = false) {
+    public static function findProductStickers($ids,$data = false) {
         $result = [];
         $products = Goods::find()->where(['IN','id',$ids])->all();
 
@@ -405,4 +405,50 @@ class Goods extends \yii\db\ActiveRecord
         }
         return $tags;
     }*/
+
+    public static function getPath($id,$categoryId = false,$categoryList = false){
+
+        return false;
+    }
+
+    public static function getProductVariants($id){
+        return GoodsVariations::find()
+            ->select([
+                'goods_variations.*',
+                'tags.value AS tagValue'
+            ])
+            ->leftJoin('tags_links','tags_links.variation_id = goods_variations.id')
+            ->leftJoin('tags','tags_links.tag_id = tags.id')
+            ->where([
+                'good_id' => $id,
+                'goods_variations.status' => 1,
+            ])
+            ->andWhere(['OR',
+                ['>','good_count(`goods_variations`.`good_id`, `goods_variations`.`id`)',0],
+                ['IS','good_count(`goods_variations`.`good_id`, `goods_variations`.`id`)',NULL]
+            ])
+            ->all();
+
+    }
+    public static function getProductVariantsTagHash($id){
+        return Tags::find()
+            ->select([
+                'tags.*',
+                'tags_groups.name AS tagName',
+                'goods_variations.id AS variationId',
+            ])
+            ->leftJoin('tags_groups','tags_groups.id = tags.group_id')
+            ->leftJoin('tags_links','tags_links.tag_id = tags.id')
+            ->leftJoin('goods_variations','goods_variations.id = tags_links.variation_id')
+            ->where([
+                'goods_variations.good_id' => $id,
+                'tags_groups.status' => 1,
+                'tags_groups.show' => 1,
+            ])
+            ->andWhere(['OR',
+                ['>','good_count(`goods_variations`.`good_id`, `goods_variations`.`id`)',0],
+                ['IS','good_count(`goods_variations`.`good_id`, `goods_variations`.`id`)',NULL]
+            ])
+            ->all();
+    }
 }

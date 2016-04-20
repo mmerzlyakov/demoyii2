@@ -41,7 +41,7 @@ $(document).ready(function () {
     $('#login').click(function(event){ // нажатие на кнопку - выпадает модальное окно
         event.preventDefault();
          
-        var url = 'login';
+        var url = '/login';
         var clickedbtn = $(this);
 
         var modalContainer = $('#my-modal');
@@ -64,7 +64,7 @@ $(document).ready(function () {
         var form = $(this);
         var result;
         $.ajax({
-            url: "submitlogin",
+            url: "/submitlogin",
             type: "POST",
 			scriptCharset: "utf-8",
             data: form.serialize(),
@@ -100,7 +100,7 @@ $(document).ready(function () {
     $('#signup').click(function(event){ // нажатие на кнопку - выпадает модальное окно
         event.preventDefault();
          
-        var url = 'signup';
+        var url = '/signup';
         var clickedbtn = $(this);
 
         var modalContainer = $('#signup-modal');
@@ -122,7 +122,7 @@ $(document).ready(function () {
         e.preventDefault();
         var form = $(this);
         $.ajax({
-            url: "submitsignup",
+            url: "/submitsignup",
             type: "POST",
 			scriptCharset: "utf-8",
             data: form.serialize(),
@@ -328,9 +328,17 @@ $(document).ready(function () {
         NavBar::begin([
             'options' => ['class' => 'navbar navbar-default'],
         ]);
-        $list = Menu::getStructure();
+        /*$list = Menu::getStructure();
 
+        echo "<pre>";
+        print_r($list);
+        echo "</pre>";
+        die();
+        */
         echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
+
+        //old widget type
+        //echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
 
         NavBar::end();
         ?>

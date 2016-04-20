@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use Yii;
+use app\models\Category;
+
 class Menu extends \yii\db\ActiveRecord
 {
 
@@ -27,11 +30,7 @@ class Menu extends \yii\db\ActiveRecord
                 ->orderby('sort ASC')
                 ->asarray()
                 ->all();
-
         }
-
-//  var_dump($result);
-//  $result = Category::find()->asArray()->all();
 
         if (!$result) {
             return null;
@@ -43,18 +42,16 @@ class Menu extends \yii\db\ActiveRecord
 //В цикле формируем массив
         for ($i = 0; $i < count($result); $i++) {
             $row = $result[$i];
+
             if ($row['parent_id'] == null) {
                 $row['parent_id'] = 0;
-//$row['count'] = 0;
             }
 //Формируем массив, где ключами являются id родительской категории
             if (empty($arr_cat[$row['parent_id']])) {
                 $arr_cat[$row['parent_id']] = array();
-//$arr_cat[$row['count']] = 0;
             }
 
             $arr_cat[$row['parent_id']][] = $row;
-//$arr_cat[$row['count']][] = count($row);
         }
 
 // $view_cat - лямда функция для создания массива категорий, который будет передан в отображение
@@ -67,16 +64,17 @@ class Menu extends \yii\db\ActiveRecord
 
             $result = array();
 
-
 //перебираем в цикле массив и выводим на экран
             for ($i = 0; $i < count($data[$parent_id]); $i++) {
                 if ($i == 0 && $fl == true) {
                     $result[] = ['label'  => $data[$parent_id][$i]['title']
                         . "(" . count($data[$parent_id]) . ")",
                                  'url'    => 'catalog/'
+
                                      . $data[$parent_id][$i]['alias'] . '/'
                                      . $data[$parent_id][$i]['id'],
                                  'alias'  => $data[$parent_id][$i]['alias'],
+
                                  //можно пометить какой либо пункт как активный
                                  'active' => $data[$parent_id][$i]['id'] == 8,
 
@@ -98,15 +96,46 @@ class Menu extends \yii\db\ActiveRecord
                                      $data, $data[$parent_id][$i]['id']
                                  ),];
                 }
-
-//рекурсия - проверяем нет ли дочерних категорий
-
+                //рекурсия - проверяем нет ли дочерних категорий
             }
             return $result;
         };
 
         $result = $view_cat($arr_cat);
+
         return $result;
+    }
+
+    public static function buildTree(array &$elements, array &$urls, $parentId = 0) {
+        $branch = array();
+        $urls[0] = '/' . Yii::$app->params['catalogPath'];
+
+        foreach ($elements as $element) {
+            if ($element['parent_id'] == $parentId) {
+
+                $urls[$element['id']] =
+                        (isset($urls[$parentId]))?$urls[$parentId] .'/'.
+                        $element['alias']:'/catalog/' . $element['alias'] . '/';
+
+                $children = self::buildTree($elements, $urls, $element['id']);
+
+                if ($children) {
+                    $element['items'] = $children;
+                }
+
+                $branch[$element['id']] = $element;
+                $branch[$element['id']]['label'] = $element['title'];
+                $branch[$element['id']]['url'] =
+
+                        (isset($urls[$parentId]))?$urls[$parentId]
+                        .'/'. $element['alias'] .
+                        '/':'/catalog/'
+                        .$element['alias'];
+
+                unset($elements[$element['id']]);
+            }
+        }
+        return $branch;
     }
 
 }

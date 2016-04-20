@@ -10,10 +10,11 @@ use yii\widgets\ListView;
 $this->title = 'Categories';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="catalog-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         //'layout' => "{pager}\n{items}\n{summary}\n{pager}",
         'itemView' => function ($model, $key, $index, $widget) {
-            return $this->render('_list_item',['model' => $model]);
+            return  $this->render('_list_item',['model' => $model]);
         },
         'itemOptions' => [
             'tag' => false,

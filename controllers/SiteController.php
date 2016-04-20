@@ -6,6 +6,8 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\Menu;
 use app\models\SignupForm;
+use app\models\Category;
+
 use Yii;
 use yii\base\Security;
 use yii\db\Query;
@@ -19,6 +21,7 @@ class SiteController extends Controller
 {
 
     public $catalogMenu;
+    public $catalogHash;
 
     public function behaviors()
     {
@@ -44,7 +47,11 @@ class SiteController extends Controller
     }
 
     public function init() {
-        $this->catalogMenu = Menu::getStructure();
+        $this->catalogHash = Category::find()->where(['active' => 1])->orderBy('level, sort')->indexBy('id')->asArray()->all();
+        $urls = [];
+        $this->catalogMenu = Menu::buildTree($this->catalogHash,$urls);
+
+        //$this->catalogMenu = Menu::getStructure();
         parent::init();
     }
 

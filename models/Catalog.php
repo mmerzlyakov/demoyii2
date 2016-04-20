@@ -34,9 +34,20 @@ class Catalog extends \yii\db\ActiveRecord
         //return $this->findByAttributes(array('alias'=>$alias));
     }
 
-    public function findBreadcrumbs($aliases)
+    public static function findBreadcrumbs($aliases,$data = false)
     {
-        $categories = Category::find()->where(['alias' => $aliases])->indexBy('id')->orderBy('level')->all();
+        array_pop($aliases);
+
+        if(!$data){
+            $categories = Category::find()->where(['alias' => $aliases])->indexBy('id')->orderBy('level')->asArray()->all();
+        }else{
+            foreach($data as $i => $item){
+                if($item['alias'] != $aliases[0]){
+                    unset($data[$i]);
+                }
+            }
+            $categories = $data;
+        }
 
         if(!$categories){
             return false;
@@ -45,13 +56,12 @@ class Catalog extends \yii\db\ActiveRecord
         $flag = 0;
         foreach($categories as $i => $category){
             if($flag > 0){
-                if(!isset($categories[$category->parent_id])){
+                if(!isset($categories[$category['parent_id']])){
                     unset($categories[$i]);
                 }
             }
             $flag = 1;
         }
-
 
         return $categories;
     }
@@ -94,4 +104,23 @@ class Catalog extends \yii\db\ActiveRecord
 
     }
 
+    public static function buildTree(array &$elements, array &$urls, $parentId = 0) {
+        $branch = array();
+        $urls[0] = '/' . Yii::$app->params['catalogPath'];
+
+        foreach ($elements as $element) {
+            if ($element['parent_id'] == $parentId) {
+                $urls[$element['id']] = (isset($urls[$parentId]))?$urls[$parentId] .'/'. $element['alias']:'/catalog/' . $element['alias'] . '/';
+                $children = self::buildTree($elements, $urls, $element['id']);
+                if ($children) {
+                    $element['items'] = $children;
+                }
+                $branch[$element['id']] = $element;
+                $branch[$element['id']]['label'] = $element['title'];
+                $branch[$element['id']]['url'] = (isset($urls[$parentId]))?$urls[$parentId] .'/'. $element['alias'] . '/':'/catalog/' . $element['alias'];
+                unset($elements[$element['id']]);
+            }
+        }
+        return $branch;
+    }
 }

@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-
+/*
 print '<pre>';
-print_r($this->params['breadcrumbs']);
+print_r(Yii::$app->controller->catalogMenu);
 print '</pre>';
-
+*/
 $priceAttributes = [
     'commissionId' => $model->commissionId,
     'productPrice' => $model->productPrice,
@@ -19,7 +19,8 @@ $priceAttributes = [
 ?>
     <div class="container">
         <div style="display: inline-block;width: 30%;">
-            <a href="<?=$breadcrumbsUrl . '/' . $model->productId?>">
+            <a href="<?=Url::toRoute($url)?>">
+                <br />
                 <?=$model->name;?>
             </a>
         </div>
@@ -36,9 +37,7 @@ $priceAttributes = [
         <div style="display: inline-block;width: 5%;">
             <?=$model->productCommission;?>
         </div>
-        <div style="display: inline-block;width: 10%;">
-            <?=$image;?>
-        </div>
+
         <div style="display: inline-block;width: 10%;">
             <?=(implode('/',$sticker));?>
         </div>

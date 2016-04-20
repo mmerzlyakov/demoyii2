@@ -81,13 +81,15 @@ class Category extends \yii\db\ActiveRecord
                 'goods.name AS name',
 
                 'variants.price AS productPrice',
-                'variants.comission as productCommission',
-                'variants.id as variantId',
+                'variants.comission AS productCommission',
+                'variants.id AS variantId',
 
-                'goods.id as productId',
-                'goods.discount as productDiscount',
-                'goods.count_pack as countPack',
-                'shops.comission_id as commissionId',
+                'goods.id AS productId',
+                'goods.discount AS productDiscount',
+                'goods.count_pack AS countPack',
+                'shops.comission_id AS commissionId',
+
+                'category_links.category_id AS categoryId',
             ])
             ->from([
                 'variants' => GoodsVariations::find()
@@ -197,5 +199,26 @@ class Category extends \yii\db\ActiveRecord
             }
         }
         return $variation;
+    }
+
+    public static function getCategoryPath($id,$data = false){
+        if(!$data){
+            $data = self::find()->where(['active' => 1])->indexBy('id')->all();
+        }
+
+        $level = $data[$id]->level;
+
+        $path = '';
+        while($level >= 0){
+            $path = $data[$id]->alias . '/' . $path;
+            $id = $data[$id]->parent_id;
+
+            $level--;
+        }
+        return Yii::$app->params['catalogPath'] . '/' . $path;
+    }
+
+    public static function changeView($alias){
+        return (end($alias) != '')? 'product':'view';
     }
 }

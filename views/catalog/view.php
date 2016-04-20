@@ -2,10 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\ListView;
+
 /*
-print '<pre>';
-print_r($model);
+print 'qq<pre>';
+print_r(Yii::$app->controller->catalogMenu);
 print '</pre>';
+*/
+/*
 print '<pre>';
 print_r($children);
 print '</pre>';
@@ -22,11 +25,11 @@ $url = '/catalog';
 $breadcrumbsUrl = '';
 $this->params['breadcrumbs'][] = ['label' => 'Каталог', 'url' => $url];
 foreach($breadcrumbsCatalog as $item){
-    if($item->title != $this->title){
-        $url .= '/'.$item->alias;
-        $this->params['breadcrumbs'][] = ['label' => $item->title, 'url' => $url];
+    if($item['title'] != $this->title){
+        $url .= '/'.$item['alias'];
+        $this->params['breadcrumbs'][] = ['label' => $item['title'], 'url' => $url];
     }else{
-        $url .= '/'.$item->alias;
+        $url .= '/'.$item['alias'];
         $breadcrumbsUrl = $url;
     }
 }
@@ -72,14 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id' => 'list-wrapper',
         ],
         'layout' => "{pager}\n{sorter}\n{items}\n{summary}\n{pager}",
-        'itemView' => function ($model, $key, $index, $widget) use ($variationsAllProductsList,$imagesAllProductsList,$stickersAllProductsList,$breadcrumbsUrl) {
+        'itemView' => function ($model, $key, $index, $widget) use (& $variationsAllProductsList,& $imagesAllProductsList,& $stickersAllProductsList,& $breadcrumbsUrl,&$urlList) {
             return $this->render('_product_item',[
-                    'model' => $model,
-                    'variation' => $variationsAllProductsList[$model->productId],
-                    'image' => $imagesAllProductsList[$model->productId],
-                    'sticker' => $stickersAllProductsList[$model->productId],
-                    'breadcrumbsUrl' => $breadcrumbsUrl,
-                ]);
+                'model' => $model,
+                'variation' => $variationsAllProductsList[$model->productId],
+                'image' => $imagesAllProductsList[$model->productId],
+                'sticker' => $stickersAllProductsList[$model->productId],
+                'breadcrumbsUrl' => $breadcrumbsUrl,
+                'url' => $urlList[$model->productId],
+            ]);
         },
 
     ]); ?>
