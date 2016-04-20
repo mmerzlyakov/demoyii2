@@ -21,15 +21,15 @@ print_r($products);
 print '</pre>';
 */
 $this->title = $model->title;
-$url = '/catalog';
+$url = '/' . Yii::$app->params['catalogPath'] . '/';
 $breadcrumbsUrl = '';
 $this->params['breadcrumbs'][] = ['label' => 'Каталог', 'url' => $url];
 foreach($breadcrumbsCatalog as $item){
     if($item['title'] != $this->title){
-        $url .= '/'.$item['alias'];
+        $url .= $item['alias'] . '/';
         $this->params['breadcrumbs'][] = ['label' => $item['title'], 'url' => $url];
     }else{
-        $url .= '/'.$item['alias'];
+        $url .= $item['alias'] . '/';
         $breadcrumbsUrl = $url;
     }
 }

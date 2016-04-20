@@ -1,13 +1,18 @@
 <?php
 // _list_item.php
-use yii\helpers\Html;
+//use yii\helpers\Html;
 use yii\helpers\Url;
 
-/*
-print '<pre>';
-print_r(Yii::$app->controller->catalogMenu);
-print '</pre>';
-*/
+/**
+ * @var object $model
+ * @var object $variation
+ * @var array $image
+ * @var array $sticker
+ * @var string $alias
+ * @var string $url
+ *
+ */
+
 $priceAttributes = [
     'commissionId' => $model->commissionId,
     'productPrice' => $model->productPrice,
@@ -19,39 +24,33 @@ $priceAttributes = [
 ?>
     <div class="container">
         <div style="display: inline-block;width: 30%;">
-            <a href="<?=Url::toRoute($url)?>">
-                <br />
-                <?=$model->name;?>
+            <a href="<?= Url::toRoute($url)?>">
+                <?= $model->name;?>
             </a>
         </div>
         <div style="display: inline-block;width: 10%;">
-            <?=\app\models\Goods::getPrice($model->productId,$model->variantId,0,$priceAttributes);?>
+            <?= \app\models\Goods::getPrice($model->productId,$model->variantId,0,$priceAttributes);?>
 
         </div>
         <div style="display: inline-block;width: 10%;">
-            <?=\app\models\Goods::getPrice($model->productId,$model->variantId,5,$priceAttributes);?>
+            <?= \app\models\Goods::getPrice($model->productId,$model->variantId,5,$priceAttributes);?>
         </div>
         <div style="display: inline-block;width: 5%;">
-            <?=$model->productPrice;?>
+            <?= $model->productPrice;?>
         </div>
         <div style="display: inline-block;width: 5%;">
-            <?=$model->productCommission;?>
+            <?= $model->productCommission;?>
         </div>
-
         <div style="display: inline-block;width: 10%;">
-            <?=(implode('/',$sticker));?>
+            <?php
+            if(is_array($image)){
+                foreach($image as $item){
+                    print $item;
+                }
+            }
+            ?>
+        </div>
+        <div style="display: inline-block;width: 10%;">
+            <?= (implode('/',$sticker));?>
         </div>
     </div>
-
-
-<?php
-/*
-<article class="item" data-key="<?= $model->id; ?>">
-    <h2 class="title">
-        <?= Html::a(
-            Html::encode($model->name),
-            Url::toRoute(['catalog/'.$model->id]), ['title' => $model->name]
-        ) ?>
-    </h2>
-</article>
-*/?>

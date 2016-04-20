@@ -57,7 +57,6 @@ $config = [
 	        // Disable r= routes
 	        'enablePrettyUrl' => true,
 	        'rules' => array(
-
                         'catalog' => 'catalog/index',
                         'catalog/index' => 'catalog/index',
                         'catalog/<alias:.+>'=>'catalog/view',

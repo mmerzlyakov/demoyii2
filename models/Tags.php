@@ -14,6 +14,9 @@ use Yii;
  */
 class Tags extends \yii\db\ActiveRecord
 {
+    public $tagName;
+    public $variationId;
+
     /**
      * @inheritdoc
      */
@@ -29,7 +32,8 @@ class Tags extends \yii\db\ActiveRecord
     {
         return [
             [['group_id', 'status'], 'integer'],
-            [['value'], 'string', 'max' => 64]
+            [['value'], 'string', 'max' => 64],
+            [['tagName','variationId'], 'safe']
         ];
     }
 
