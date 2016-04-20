@@ -31,12 +31,13 @@ class Catalog extends \yii\db\ActiveRecord
     public function findByAlias($alias)
     {
         return Category::findOne(['alias'=>$alias]);
-        //return $this->findByAttributes(array('alias'=>$alias));
     }
 
     public static function findBreadcrumbs($aliases,$data = false)
     {
-        array_pop($aliases);
+        if(empty(end($aliases))){
+            array_pop($aliases);
+        }
 
         if(!$data){
             $categories = Category::find()->where(['alias' => $aliases])->indexBy('id')->orderBy('level')->asArray()->all();
@@ -90,10 +91,7 @@ class Catalog extends \yii\db\ActiveRecord
     }
 
     public function getParent() {
-        return (new Category)
-            ->hasOne(self::classname(),
-            ['id' => 'parent_id'])->
-            from(Category::tableName() . ' AS parent');
+        return (new Category)->hasOne(self::classname(),['id' => 'parent_id'])->from(Category::tableName() . ' AS parent');
     }
     public function getParentTitle() {
         return ($this->parent)?$this->parent->title:'';

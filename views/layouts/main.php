@@ -32,132 +32,11 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
 
 
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<!-- script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script -->
 
 	<script type="text/javascript">
 
-$(document).ready(function () {
 
-    $('#login').click(function(event){ // нажатие на кнопку - выпадает модальное окно
-        event.preventDefault();
-         
-        var url = '/login';
-        var clickedbtn = $(this);
-
-        var modalContainer = $('#my-modal');
-        var modalBody = modalContainer.find('.modal-body');
-        modalContainer.modal({show:true});
-
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {/*'userid':UserID*/},
-            success: function (data) {
-                $('.modal-body').html(data);
-                modalContainer.modal({show:true});
-            }
-        });
-    });
-
-    $(document).on("submit", '.login-form', function (e) {
-        e.preventDefault();
-        var form = $(this);
-        var result;
-        $.ajax({
-            url: "/submitlogin",
-            type: "POST",
-			scriptCharset: "utf-8",
-            data: form.serialize(),
-            success: function (data) {
-                    var modalContainer = $('#my-modal');
-    		        var modalBody = modalContainer.find('.modal-body');
-					var insidemodalBody = modalContainer.find('.gb-user-form');
-				try
-				{
-	                result = jQuery.parseJSON(data);
-    				console.log(result);
-
-					if (result.flag == true) {
-						insidemodalBody.html(result).hide(); 
-						$('#my-modal').modal('hide');
-                        /*$('#userlabel').label(result.username + " / " + result.phone);
-                        $('#userlabel').css("display","block");
-	
-						$('#login').css("display", "none");
-						$('#signup').css("display", "none");*/
-                        location.reload();
-						return true;
-					}
-                }
-				catch(e){
-                    modalBody.html(data).hide().fadeIn();
-					return true;
-	            }
-            },
-        });
-    });
-
-    $('#signup').click(function(event){ // нажатие на кнопку - выпадает модальное окно
-        event.preventDefault();
-         
-        var url = '/signup';
-        var clickedbtn = $(this);
-
-        var modalContainer = $('#signup-modal');
-        var modalBody = modalContainer.find('.modal-body');
-        modalContainer.modal({show:true});
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: {/*'userid':UserID*/},
-            success: function (data) {
-                $('.modal-body').html(data);
-                modalContainer.modal({show:true});
-            }
-        });
-    });
-
-
-    $(document).on("submit", '.signup-form', function (e) {
-        e.preventDefault();
-        var form = $(this);
-        $.ajax({
-            url: "/submitsignup",
-            type: "POST",
-			scriptCharset: "utf-8",
-            data: form.serialize(),
-            success: function (data) {
-                var modalContainer = $('#signup-modal');
-                var modalBody = modalContainer.find('.modal-body');
-                var insidemodalBody = modalContainer.find('.gb-user-form');
-				try
-				{
-	                result = jQuery.parseJSON(data);
-    				console.log(result);
-				//	alert(result.username);
-	                       
-					if (result.flag == true) {
-						insidemodalBody.html(result).hide(); 
-						$('#signup-modal').modal('hide');
-						/*$('#userlabel').text(result.username + " / "+result.phone);
-                        $('#userlabel').css("display","block");
-
-						$('#login').css("display", "none");
-						$('#signup').css("display", "none");
-                           */ location.reload();
-						return true;
-					}
-                }
-				catch(e){
-                    modalBody.html(data).hide().fadeIn();
-					return true;
-	            }
-            },
-        });
-    });
-
-
-});
 	</script>
 
 </head>
@@ -171,6 +50,8 @@ $(document).ready(function () {
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
+
+            'style'=>'width: 100%;'
         ],
     ]);
     $menuItems = [
@@ -314,20 +195,30 @@ $(document).ready(function () {
 
 
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => [
+                'class' => 'navbar-nav navbar-right',
+                //'style'=>'width: 100%;'
+                ],
         'items' => $menuItems,
     ]);
+
+    echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%;' ], 'items' => Yii::$app->controller->catalogMenu]);
 
     NavBar::end();
 
 ////////////////////////////////////////////////////////////////////////////////
 
     ?>
-    <div class="container">
+
+
+    <div class="container" style="width: 90%;">
         <?php
-        NavBar::begin([
-            'options' => ['class' => 'navbar navbar-default'],
-        ]);
+       /* NavBar::begin([
+            'options' => [
+                'class' => 'navbar navbar-default',
+                'style'=>'width: 100%;'
+            ],
+        ]);*/
         /*$list = Menu::getStructure();
 
         echo "<pre>";
@@ -335,12 +226,12 @@ $(document).ready(function () {
         echo "</pre>";
         die();
         */
-        echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
+       // echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%;' ], 'items' => Yii::$app->controller->catalogMenu]);
 
         //old widget type
         //echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
 
-        NavBar::end();
+    //    NavBar::end();
         ?>
     </div>
 

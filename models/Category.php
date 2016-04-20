@@ -219,6 +219,6 @@ class Category extends \yii\db\ActiveRecord
     }
 
     public static function changeView($alias){
-        return (end($alias) != '')? 'product':'view';
+        return (!empty(end($alias)) && (end($alias) === ''.end($alias)*1))? 'product':'view';
     }
 }

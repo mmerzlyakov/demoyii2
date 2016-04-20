@@ -145,6 +145,7 @@ class CatalogController extends Controller
                     'variations' => $variations,
                     'tags' => $tags,
                     'productImages' => $productImages,
+                    'breadcrumbsCatalog' => $breadcrumbsCatalog,
                 ]);
             }
         }
