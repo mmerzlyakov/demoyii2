@@ -13,7 +13,6 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\ButtonDropdown;
 use yii\widgets\Pjax;
 use yii\bootstrap\Button;
-//use yii\widgets\Menu;
 use app\models\Menu;
 
 AppAsset::register($this);
@@ -26,21 +25,11 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-
     <?php $this->head() ?>
-
     <meta charset="<?= Yii::$app->charset ?>">
-
-
-	<!-- script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script -->
-
-	<script type="text/javascript">
-
-
-	</script>
-
 </head>
 <body>
+
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -50,32 +39,14 @@ AppAsset::register($this);
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
-
-            'style'=>'width: 100%;'
+            'style'=>'width: 100%; color: #fefefe;'
         ],
     ]);
-    $menuItems = [
-        //['label' => 'Home', 'url' => ['/site/index']],
-        //['label' => 'About', 'url' => ['/site/about']],
-        //['label' => 'Contact', 'url' => ['/site/contact']],
-        //['label' => 'User management', 'url' => ['/user']],
 
-    ];
-    /*if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Вход', 'options'=> ['id'=>'login']];
-        $menuItems[] = ['label' => 'Регистрация', 'options' => ['id'=>'signup']];
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton('',['class' => 'btn btn-link' , 'id' => 'userlabel'])
-            . Html::endForm()
-            . '</li>';  
-    }*/
-
+    $menuItems = [];
     $subItems = [];
 
     if(!Yii::$app->user->isGuest) {
-
-
         $subItems[] = [
             'label' => 'Мои адреса',
             'url'   => '#'
@@ -84,13 +55,10 @@ AppAsset::register($this);
             'label' => 'Операции с балансом',
             'url'   => '#'
         ];
-
     }
 
     if(Yii::$app->user->can('GodMode')){
-
-            $subItems[] =
-                            [
+            $subItems[] =   [
                                 'label' => 'Управление пользователями',
                                 'url' => '/user'
                             ];
@@ -103,53 +71,44 @@ AppAsset::register($this);
     }
 
     if(!Yii::$app->user->isGuest) {
-    $subItems[] =   [
-                        'label' => 'История заказов',
-                         'url' => '#'
+            $subItems[] =   [
+                                'label' => 'История заказов',
+                                 'url' => '#'
                             ];
-    $subItems[] =   [
-                         'label' => 'Промо код',
-                                'url' => '#'
+            $subItems[] =   [
+                                 'label' => 'Промо код',
+                                 'url' => '#'
                             ];
-    $subItems[] =   [
-                                'label' => 'Избранные товары',
-                                'url' => '#'
+            $subItems[] =   [
+                                 'label' => 'Избранные товары',
+                                 'url' => '#'
                             ];
-    $subItems[] =   [
-                                'label' => 'Обратная связь',
-                                'url' => '#'
+            $subItems[] =   [
+                                 'label' => 'Обратная связь',
+                                 'url' => '#'
                             ];
-    $subItems[] =   [
-                                'label' => '',
-                                'options' => [
-                                    'role' => 'presentation',
-                                    'class' => 'divider'
-                                ]
+            $subItems[] =   [
+                                 'label' => '',
+                                 'options' => [
+                                                'role' => 'presentation',
+                                                'class' => 'divider'
+                                              ]
                             ];
-
-    $subItems[] = [
-            'label'       => 'Выход из системы',
-            'url'         => '/site/logout',
-            'linkOptions' => ['data-method' => 'post'],
-        ];
+            $subItems[] =   [
+                                 'label'       => 'Выход из системы',
+                                 'url'         => '/site/logout',
+                                 'linkOptions' => ['data-method' => 'post'],
+                            ];
     }
 
-   // var_dump($subItems);die();
-
     if(!Yii::$app->user->isGuest) {
-
-
         $label = Yii::$app->user->identity->name . " / ". Yii::$app->user->identity->phone;
         $style = 'margin:5px;';
-
-       // $idDB = 'userlabel';
     }
     else {
 
         $label = '';
         $style = 'margin: 5px;';
-     //   $idDB = 'signup';
-
         $menuItems[] = '<li>'
             . Button::widget(
                 [
@@ -177,7 +136,6 @@ AppAsset::register($this);
             . '</li>';
     }
 
-
     $menuItems[] = '<li>'
         .    ButtonDropdown::widget([
             'label' => $label,
@@ -187,60 +145,28 @@ AppAsset::register($this);
                 'id' => 'userlabel',
             ],
             'dropdown' => [
-                //'class' => $style,
                 'items' => $subItems,
             ]
         ])
         .'</li>';
 
-
     echo Nav::widget([
         'options' => [
                 'class' => 'navbar-nav navbar-right',
-                //'style'=>'width: 100%;'
                 ],
         'items' => $menuItems,
     ]);
 
     echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%;' ], 'items' => Yii::$app->controller->catalogMenu]);
-
     NavBar::end();
 
-////////////////////////////////////////////////////////////////////////////////
-
     ?>
-
-
-    <div class="container" style="width: 90%;">
-        <?php
-       /* NavBar::begin([
-            'options' => [
-                'class' => 'navbar navbar-default',
-                'style'=>'width: 100%;'
-            ],
-        ]);*/
-        /*$list = Menu::getStructure();
-
-        echo "<pre>";
-        print_r($list);
-        echo "</pre>";
-        die();
-        */
-       // echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav', 'style'=>'width: 100%;' ], 'items' => Yii::$app->controller->catalogMenu]);
-
-        //old widget type
-        //echo Nav::widget(['options' => ['id' => 'topnav','class' => 'navbar-nav navbar-topnav'], 'items' => Yii::$app->controller->catalogMenu]);
-
-    //    NavBar::end();
-        ?>
-    </div>
 
     <div class="container">
 
         <?= Breadcrumbs::widget([
             'homeLink' => ['label' => 'Главная', 'url' => '/'],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],   ]) ?>
-
         <?= $content ?>
 	
     </div>
